@@ -1,5 +1,10 @@
 body {
-	background-color: #16324c;
+	background-color: #2F4F4F;
+}
+
+h1 {
+	text-align: center;
+
 }
 
 #outer {
@@ -12,7 +17,8 @@ body {
   left: 0;
   right: 0;
   margin: auto;
-  background-color: #16324c;
+	/*background-color: #010100;
+  background-color: #16324c;*/
 }
 
 #container {
@@ -20,13 +26,14 @@ body {
   /*width:90%;
   height:85%;*/
   background-color:black;
-  position: absolute;
-  top:-5%;
+  position: relative;
+  /*top:-5%;*/
   bottom: 0;
   left: 0;
   right: 0;
   margin: auto;
 }
+
 
 #score {
   position:relative;
@@ -56,7 +63,6 @@ body {
   text-align: center;
   line-height: 40px;
 	font-family: Verdana, arial, helvetica, sans-serif;
-
 }
 
 #play-button {
@@ -77,5 +83,67 @@ body {
 
 .square {
   float: left;
+}
+
+@media (max-width: 1500px), (max-height: 1500px) {
+	#dialog {
+		font-size: 25px;
+		line-height: 30px;
+	}
+}
+@media (max-width: 1000px),  (max-height: 1000px) {
+	#dialog {
+		font-size: 20px;
+		line-height: 25px;
+	}
+}
+
+@media (max-width: 768px), (max-height: 768px) {
+
+	#dialog {
+		font-size: 16px;
+		line-height: 18px;
+	}
+	#play-button {
+		font-size: 14px;
+		width: 120px;
+		border-radius: 8px;
+		padding: 4px;
+	}	
+
+	#title {
+		font-size: 22px;
+		line-height: 24px;
+	}
+
+	#score {
+		font-size: 20px;
+		line-height: 22px;
+	}
+
+}
+
+@media (max-width: 468px),  (max-height: 468px) {
+	#dialog {
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	#play-button {
+		font-size: 12px;
+		width: 100px;
+		border-radius: 6px;
+		padding: 3px;
+	}	
+
+	#title {
+		font-size: 18px;
+		line-height: 20px;
+	}
+
+	#score {
+		font-size: 16px;
+		line-height: 18px;
+	}
 }
 

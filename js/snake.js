@@ -3,6 +3,7 @@ $(document).ready(function() {
 });
 
 function main() {
+	setContainerSize();
   var myGrid = new grid();
   $("#play-button").one("click", function() {
     $("#instructions").hide();
@@ -17,48 +18,54 @@ function play() {
   myGame.mainLoop();
 }
 
+function setContainerSize() {
+	$container = $("#container");
+	$title = $('#title');
+	$score = $('#score');
+	titleHeight = $title.outerHeight(true);
+	console.log(titleHeight);
+	if (($(window).height() - titleHeight - $score.outerHeight(true)) >= $(window).width()) {
+		$container.css({'width': 'calc(100vw - 10px)'});	
+
+		//$container.width('calc(100% - 5px)');
+		$container.height($container.width());
+	} else {
+		$container.css({'height': 'calc(100vh - ' + titleHeight + 'px - ' + $score.outerHeight(true) + 'px - 10px)'});
+		//$container.height('calc(100% - 5px)');
+		$container.width($container.height());
+	}
+
+	$(window).on('resize', function() {
+		if (($(window).height() - $title.outerHeight(true) - $score.outerHeight(true)) >= $(window).width()) {
+			$container.css({'width': 'calc(100vw - 10px)'});	
+			//$container.width('calc(100% - 5px)');
+			$container.height($container.width());
+		} else {
+			$container.css({'height': 'calc(100vh - ' + $title.outerHeight(true) + 'px - ' + $score.outerHeight(true) + 'px - 10px)'});
+			//$container.css({'height': 'calc(100vh - 50px)'});
+			//$container.height('calc(100% - 5px)');
+			$container.width($container.height());
+		}
+	});
+}
+
+
 function grid() {
-  var dim = 20;
-	
-
-	$outer = $('#outer');
-	$outer.width($(document).width());
-	$outer.height($(document).height());
-
-	containerWidth = .9 * $outer.width();
-	containerHeight = .85 * $outer.height();
-	
+	var num = 40;
 	$container = $('#container');
-	$container.width(containerWidth + "px");
-	$container.height(containerHeight + "px");
+		
+  var height = $("#container").height();
+  var width = $("#container").width();
 
-  var height = Math.floor($("#container").height());
-  var width = Math.floor($("#container").width());
-  
-  var i = height;
-  while (i % dim != 0) {
-    i--;
-  }
-  height = i;
-  i = width;
-  while (i % dim != 0) {
-    i--;
-  }
-  width = i;
-  var $container = $("#container");
-  $container.css({"width": width + "px", "height": height + "px"});
-  console.log("width = " + width);
-  console.log("height = " + height);
-  this.cols = width/dim;
-  this.rows = height/dim;
+  this.cols = num;
+  this.rows = num;
 
   for (var i = 0; i < this.rows; i++) {
     for (var j = 0; j < this.cols; j++) {
       var $square = $("<div id=\"" + j + "_" + i + "\"class=\"square\"></div>");
-      $square.width(dim).height(dim);
+			$square.width('calc(100% / ' + num + ')').height('calc(100% / ' + num + ')');
       $square.css("background-color", "black");
       $square.appendTo("#container");
-      //this.squares[j][i] = $square;
     }
   }  
 }
@@ -81,15 +88,7 @@ function game(myGrid) {
   this.incrementScore = incrementScore;
 	//this.resize = resize;
 }
-/*
-function resize() {
-	self = this;
-	$(window).resize(function() {
-		$('.square').remove();
-		self.myGrid = new grid();
-	});
-}
-*/
+
 function endGame() {
   $(".square").css("background-color","black");
   self = this;
