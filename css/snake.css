@@ -1,5 +1,5 @@
 body {
-	background-color: #2F4F4F;
+	background-color: #16324c;
 }
 
 h1 {
@@ -34,14 +34,17 @@ h1 {
   margin: auto;
 }
 
-
 #score {
   position:relative;
   top:93.75%;
   left:5%;
   font-family: Verdana, arial, helvetica, sans-serif;
   font-size: 25px;
-  color:white;
+  color: white;
+}
+
+#title {
+	color: white;
 }
 
 #instructions {
