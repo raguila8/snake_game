@@ -11,6 +11,6 @@ Basically, it's a snake that you have to move around the board and which grows l
 
 ## Acknowledgments
 
-* This project was build as a* This project was created as part of The Odin Project curriculum.
+* This project was created as part of The Odin Project curriculum.
 
 
