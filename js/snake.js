@@ -12,44 +12,35 @@ function main() {
   });
 }
 
-function play() {
-  var myGrid = new grid();
-  var myGame = new game(myGrid);
-  myGame.mainLoop();
-}
-
+// Sets the nxn container dimensions based on the width and height of the window.
+// If width is greater than height then n is set to height and vice versa.
 function setContainerSize() {
 	$container = $("#container");
 	$title = $('#title');
 	$score = $('#score');
 	titleHeight = $title.outerHeight(true);
-	console.log(titleHeight);
 	if (($(window).height() - titleHeight - $score.outerHeight(true)) >= $(window).width()) {
 		$container.css({'width': 'calc(100vw - 10px)'});	
-
-		//$container.width('calc(100% - 5px)');
 		$container.height($container.width());
 	} else {
 		$container.css({'height': 'calc(100vh - ' + titleHeight + 'px - ' + $score.outerHeight(true) + 'px - 10px)'});
-		//$container.height('calc(100% - 5px)');
 		$container.width($container.height());
 	}
 
 	$(window).on('resize', function() {
 		if (($(window).height() - $title.outerHeight(true) - $score.outerHeight(true)) >= $(window).width()) {
 			$container.css({'width': 'calc(100vw - 10px)'});	
-			//$container.width('calc(100% - 5px)');
 			$container.height($container.width());
 		} else {
 			$container.css({'height': 'calc(100vh - ' + $title.outerHeight(true) + 'px - ' + $score.outerHeight(true) + 'px - 10px)'});
-			//$container.css({'height': 'calc(100vh - 50px)'});
-			//$container.height('calc(100% - 5px)');
 			$container.width($container.height());
 		}
 	});
 }
 
 
+// Constructor for the grid object. It has properties cols and rows which are 
+// the grid's dimensions (n). It creates an n by n grid that is responsive.
 function grid() {
 	var num = 40;
 	$container = $('#container');
@@ -70,6 +61,7 @@ function grid() {
   }  
 }
 
+// Constructor for the Game object. It has a grid object as a property. 
 function game(myGrid) {
   this.myGrid = myGrid; 
   this.snakeHeadCoord = [Math.floor(this.myGrid.cols/2), Math.floor(this.myGrid.rows/2)];
@@ -86,9 +78,11 @@ function game(myGrid) {
   this.endGame = endGame;
   this.length = 1;
   this.incrementScore = incrementScore;
-	//this.resize = resize;
 }
 
+// Ends the game by anouncing the user's score and asking if he or she wants
+// to play again. If yes, another game is started and the game loop is ran 
+// again.
 function endGame() {
   $(".square").css("background-color","black");
   self = this;
@@ -99,15 +93,17 @@ function endGame() {
   $("#instructions").show();
   $("#play-button").one("click", function() {
     $("#instructions").hide();
-    //var myGrid = new grid();
 		var myGame = new game(self.myGrid);
+		$("#score").text("Length: " + myGame.length);
     myGame.mainLoop();
   });
-
 }
 
+// Adds a green square to the snake. 
 function grow() {
   var self = this;
+	// Finds where to put the green square based on the current direction of the
+	// last square in the snake.
   if (self.snake.length >= 2) {
     var coord0 = self.snake[0].attr('id').split('_');
     var coord1 = self.snake[1].attr('id').split('_');
@@ -130,6 +126,8 @@ function grow() {
       self.snake.unshift($tail);
       $tail.css("background-color", "green");
     }
+	// Just add the green square behind the snake defined by the snake's current
+	// direction.
   } else {
     var coord = self.$snakeHead.attr('id').split('_');
     if (self.direction == 'r') {
@@ -152,6 +150,8 @@ function grow() {
   }
 }
 
+// Randomly places food inside the grid. Food cannt be placed on the squares 
+// that the snake occupies.
 function placeFood() {
   var self = this;
   function notEqual(snake) {
@@ -166,19 +166,22 @@ function placeFood() {
 
   }
   self.$food.css({"background-color":"red"});
-
 }
 
+// Increments score everytime snake eats food.
 function incrementScore() {
   var self = this;
   self.length += 1;
   $("#score").text("Length: " + self.length); 
 }
 
+// This is the main game loop.
 function mainLoop() {
   var self = this;
   var x = self.snakeHeadCoord[0];
   var y = self.snakeHeadCoord[1];
+	// Arrow key listener. Changes the direction of the snake when arrow keys 
+	// are pressed.
   document.onkeydown = function(e) {
     var code = e.keyCode || e.which;
     if (code == 39) {
@@ -207,9 +210,10 @@ function mainLoop() {
       }
     }
   }
-
-  
+	// main loop. Executes every 50 ms.
   loop = setInterval(function() {
+		// If snake eats food snake grows and food is placed randomly on grid. Also
+		// score is incremented.
     if (self.$snakeHead.is(self.$food)) {
       self.placeFood();
       self.grow();
@@ -224,7 +228,7 @@ function mainLoop() {
     } else if (self.direction == 'l') {
       x--;
     }
-
+		// If snake crashes against the container then game ends.
     if (x == self.myGrid.cols || x == -1 || y == self.myGrid.rows || y == -1) {
       self.endGame();
       return;
@@ -232,11 +236,13 @@ function mainLoop() {
     
     var $head = $("#" + x + "_" + y);
     for (var i = 0; i < self.snake.length; i++) {
+			// If snake crashes with itself then game ends.
       if (self.snake[i].is($head)) {
         self.endGame();
         return;
       }
     }
+		// Moves the snake in the direction its moving
     self.snake[0].css("background-color", "black");
     self.$snakeHead = $("#" + x + "_" + y);
     self.snake.shift();
@@ -244,5 +250,3 @@ function mainLoop() {
     self.$snakeHead.css({"background-color":"green"});
   }, 50);
 }
-
-
